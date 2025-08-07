@@ -1,0 +1,13 @@
+gtk3
+gtk4
+waybar
+wireplumber
+midori-bin
+kitty
+wofi
+rofi
+starship
+hyprpaper 0.7.5-1
+hyprutils 0.7.1-1
+thunar
+thunderbird 138.0-1
