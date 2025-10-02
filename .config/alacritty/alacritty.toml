@@ -1,0 +1,38 @@
+#gruvbox_material_medium_dark
+#gruvbox_dark
+#hatsunemiku
+#dark_pride
+#dark_pastels
+
+
+
+
+[general]
+import = [
+    "~/.config/alacritty/themes/themes/iris.toml"
+]
+[[hints.enabled]]
+regex = "[^ ]+\\.rs:\\d+:\\d+"
+command = { program = "code", args = [ "--goto" ] }
+
+mouse = { enabled = true }
+[font.normal]
+family = "ProFont IIx Nerd Font Mono"
+style = "Regular"
+
+[font]
+size = 10.0
+
+[font.bold]
+family = "ProFont IIx Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "ProFont IIx Nerd Font Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "ProFont IIx Nerd Font Mono"
+style = "Italic"
+
+
