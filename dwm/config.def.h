@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-
+#include <X11/XF86keysym.h>
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int gappx     = 10;        /* gaps between windows */
@@ -11,6 +11,7 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const int user_bh            = 28;        
 static const char *fonts[]          = { "ProFont IIx Nerd Font Mono:size=10" };
 static const char dmenufont[]       = "ProFont IIx Nerd Font Mono:size=10";
 static const char col_gray1[]       = "#FFECD9";  // Verde Muito suave
@@ -47,9 +48,10 @@ static const int refreshrate = 120;  /* refresh rate (per second) for client mov
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	{ "tiling(super-t)",      tile },    /* first entry is default */
+	{ "monocle(super-g)",      monocle },
+	{ "floating(super-m)",      NULL },    /* no layout function means floating behavior */
+	
 };
 
 /* key definitions */
@@ -67,16 +69,19 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char *browsercmd[]  = { "helium", NULL };
+static const char *discordclient[]  = { "flatpak run dev.vencord.Vesktop", NULL };
+static const char *texteditorcmd[]  = { "code", NULL };
 static const char *filecmd[]  = { "pcmanfm", NULL };
 static const char *clipmenucmd[] = { "clipmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *sscmd[]  = { "ss-area", NULL };
-static const char *ssfullcmd[]  = { "ss-full", NULL };
+static const char *sscmd[]  = { "scrot -s", NULL };
+static const char *ssfullcmd[]  = { "scrot", NULL };
 static const char *brmcmd[] = { "brightnessctl", "set", "5%-", NULL };
 static const char *brpcmd[] = { "brightnessctl", "set", "5%+", NULL };
 static const char *mutecmd[] = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
 static const char *voldowncmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%-", NULL };
 static const char *volupcmd[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%+", NULL };
-static const char *dmenu_unicode[] = { "~/.config/unicode_dmenu.sh", NULL };
+//static const char *dmenu_unicode[] = { "~/.config/unicode_dmenu.sh", NULL };
 
 
 
@@ -85,24 +90,26 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_space,  spawn,          {.v = dmenucmd } },
 	{ MODKEY,            			XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,            			XK_e,      spawn,          {.v = filecmd} },
+	{ MODKEY,            			XK_b,      spawn,          {.v = browsercmd} },
+	{ MODKEY,            			XK_r,      spawn,          {.v = texteditorcmd} },
+	{ MODKEY,            			XK_d,      spawn,          {.v = discordclient} },
+	{ MODKEY|ShiftMask,             XK_v,      spawn,          SHCMD("pavucontrol") },
 	{ MODKEY,            			XK_v, 	   spawn,          {.v = clipmenucmd } },
 	{ 0,                       	    XK_Print,  spawn,          {.v = sscmd } },
 	{ ShiftMask,             	    XK_Print,  spawn,          {.v = ssfullcmd } },
-	{ MODKEY,                       XK_u,      spawn,          {.v = dmenu_unicode } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_u,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,             			XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY|ControlMask,           XK_space,  setlayout,      {0} },
+	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,          XK_f,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
